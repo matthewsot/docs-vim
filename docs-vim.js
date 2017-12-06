@@ -3,7 +3,8 @@ var mode = "insert"; // Default to insert mode
 function codeFromKey(shifted, key) {
     var specialKeys = { "/": 191, "Escape": 27, "Shift": 16,
         "Control": 17, "Alt": 18, "Backspace": 8, " ": 32, "Enter": 13,
-        "Tab": 9, "ArrowLeft": 37, "ArrowUp": 38, "ArrowRight": 39, "ArrowDown": 40 };
+        "Tab": 9, "ArrowLeft": 37, "ArrowUp": 38, "ArrowRight": 39, "ArrowDown": 40,
+    "Delete": 46 };
     var shiftedSpecialKeys = { "?": 191 };
     if (typeof specialKeys[key] !== "undefined") {
         if (shifted && typeof shiftedSpecialKeys[key] !== "undefined") {
@@ -60,7 +61,8 @@ docs.keyboard.handleKeyboard = function (e) {
         if (e.key in keyMap) {
             e.key = keyMap[e.key];
         }
-        if (e.key.indexOf("Arrow") == 0) {
+        if (e.key.indexOf("Arrow") == 0
+        || e.key == "Delete") {
             docs.pressKey(e.key, codeFromKey(false, e.key));
             e.preventDefault();
             return false;
@@ -71,6 +73,10 @@ docs.keyboard.handleKeyboard = function (e) {
     return false;
 }
 
+function setBorderWidth(width) {
+    $("head").append("<style>.kix-cursor-caret { border-width: " + width + "; }</style>");
+}
+
 var lastChr = "";
 docs.keyboard.handleKeydown = function (e) {
     var chr = e.key; //"a", "b", etc.
@@ -78,10 +84,12 @@ docs.keyboard.handleKeydown = function (e) {
     if (mode == "insert") {
         if (chr == "Escape") {
             mode = "normal";
+            setBorderWidth("7px");
             docs.keyboard.startBlockingKeyboard();
         }
         if (chr == escapeSeq[1] && lastChr == escapeSeq[0]) {
             mode = "normal";
+            setBorderWidth("7px");
             e.preventDefault();
             docs.pressKey(e.key, codeFromKey(false, "Backspace"));
             docs.keyboard.startBlockingKeyboard();
@@ -91,6 +99,7 @@ docs.keyboard.handleKeydown = function (e) {
     if (mode == "normal") {
         if (chr == "i") {
             mode = "insert";
+            setBorderWidth("2px");
             docs.keyboard.stopBlockingKeyboard();
         }
     }
