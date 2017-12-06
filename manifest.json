@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "Docs-Vim",
+  "version": "0.01",
+
+  "applications": {
+    "gecko": {
+      "id": "docs-vim@matthewsot.outlook.com",
+      "strict_min_version": "45.0"
+    }
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.google.com/*document/d/*/edit*"],
+      "js": ["jquery.min.js", "docs-plus/utils.js", "docs-plus/docs.js", "docs-plus/editor-input.js", "docs-vim.js"]
+    }
+  ]
+}
