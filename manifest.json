@@ -13,7 +13,8 @@
   "content_scripts": [
     {
       "matches": ["*://*.google.com/*document/d/*/edit*"],
-      "js": ["jquery.min.js", "docs-plus/utils.js", "docs-plus/docs.js", "docs-plus/editor-input.js", "docs-vim.js"]
+      "js": ["jquery.min.js", "docs-plus/utils.js", "docs-plus/docs.js", 
+          "docs-plus/editor-input.js", "docs-plus-plus.js", "docs-vim.js"]
     }
   ]
 }
