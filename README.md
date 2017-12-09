@@ -11,8 +11,13 @@ Currently supported features:
     * Getting to insert mode with the "i" key
     * Moving with the home-row keys
 * Chrome (tested on 63.0)
-* [Not really] Firefox
+* (Not really) Firefox
     * It will install, but many of the features work incorrectly.
+    
+## How?
+Glad you asked - this project is built with the [docs-plus library](https://github.com/matthewsot/docs-plus),
+which enables rich interactions with the Google Docs editor. Improvements made to the library here (particularly those in
+the ``docs-plus-plus.js`` file) will probably eventually be pushed back up to the main docs-plus library.
 
 ## Keys
 Currently set up to work with my DVORAK layout, these are the default keybindings:
