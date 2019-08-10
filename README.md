@@ -1,4 +1,8 @@
 # docs-vim
+## Cloning Instructions
+This repository uses ``git submodule``, after cloning it you should run ``git
+submodule init`` and ``git submodule update``.
+
 ## Overview
 This simulates very limited versions of vim's insert and normal modes on Google
 Docs.
