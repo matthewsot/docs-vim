@@ -1,6 +1,7 @@
 # docs-vim
 ## Overview
-This simulates very limited versions of vim's insert and normal modes on Google Docs.
+This simulates very limited versions of vim's insert and normal modes on Google
+Docs.
 
 Currently supported features:
 * Insert mode:
@@ -15,9 +16,11 @@ Currently supported features:
     * It will install, but many of the features work incorrectly.
     
 ## How?
-Glad you asked - this project is built with the [docs-plus library](https://github.com/matthewsot/docs-plus),
-which enables rich interactions with the Google Docs editor. Improvements made to the library here (particularly those in
-the ``docs-plus-plus.js`` file) will probably eventually be pushed back up to the main docs-plus library.
+Glad you asked - this project is built with the [docs-plus
+library](https://github.com/matthewsot/docs-plus), which enables rich
+interactions with the Google Docs editor. Improvements made to the library here
+(particularly those in the ``docs-plus-plus.js`` file) will probably eventually
+be pushed back up to the main docs-plus library.
 
 ## Keys
 Currently set up to work with my DVORAK layout, these are the default keybindings:
@@ -29,15 +32,15 @@ Currently set up to work with my DVORAK layout, these are the default keybinding
     * i: enter insert mode
     * dhtn: move
 
-Note that most of these can be changed in ``docs-vim.js``. For example, if you want to use the more
-common QWERTY keybindings, you'd change to:
+Note that most of these can be changed in ``docs-vim.js``. For example, if you
+want to use the more common QWERTY keybindings, you'd change to:
 
 ```
 vim = {
     "mode": "insert",
     "keys": {
         "move": "hjkl",
-        "escapeSeq": "jk"
+        "escapeSeq": "jk",
     }
 };
 ```
@@ -51,5 +54,3 @@ eventually:
 * Selections with v/shift-V (visual/visual line mode)
 * Command mode with find and replace, go to line #, etc.
 * Quick find with /
-* Fixed Firefox support
-

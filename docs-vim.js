@@ -2,25 +2,29 @@ vim = {
     "mode": "insert",
     "keys": {
         "move": "dhtn", // QWERTY: hjkl
-        "escapeSeq": "hn" // QWERTY: jk or jl
+        "escapeSequence": "hn", // QWERTY: jk or jl
     }
 };
 
 vim.switchToNormalMode = function () {
     vim.mode = "normal";
     docs.setCursorWidth("7px");
-    docs.keyboard.startBlockingKeyboard();
 };
 
 vim.switchToInsertMode = function () {
     vim.mode = "insert";
     docs.setCursorWidth("2px");
-    docs.keyboard.stopBlockingKeyboard();
 };
 
 // Called in normal mode.
-docs.keyboard.blockedKeydown = function (e) {
+vim.normal_keydown = function (e) {
+    if (e.key.match(/F\d+/)) {
+        // Pass through any function keys.
+        return true;
+    }
+
     e.preventDefault();
+    e.stopPropagation();
 
     if (e.key == "i") {
         vim.switchToInsertMode();
@@ -38,7 +42,7 @@ docs.keyboard.blockedKeydown = function (e) {
     }
 
     if (e.key.indexOf("Arrow") == 0 || e.key == "Delete") {
-        docs.keyboard.pressKey(docs.utils.codeFromKey(e.key));
+        docs.pressKey(docs.codeFromKey(e.key));
     }
 
     if (e.key == "V" && e.shift) {
@@ -48,28 +52,37 @@ docs.keyboard.blockedKeydown = function (e) {
     return false;
 };
 
-// This is what gets called when the user is in insert mode.
-var lastChr = "";
-docs.keyboard.unblockedKeydown = function (e) {
-    var chr = e.key; //"a", "b", etc.
-    var escapeSeq = "hn";
-
-    if (vim.mode != "insert") {
-        console.log("This shouldn't happen");
-        return true;
-    }
-
-    if (chr == "Escape") {
+// Called in insert mode.
+var currentSequence = "";
+vim.insert_keydown = function (e) {
+    if (e.key == "Escape") {
         vim.switchToNormalMode();
     }
 
-    if (chr == vim.keys.escapeSeq[1] && lastChr == vim.keys.escapeSeq[0]) {
+    currentSequence += e.key;
+    if (currentSequence == vim.keys.escapeSequence) {
         e.preventDefault();
+        e.stopPropagation();
+
         // We need to delete the first character already typed in the escape
         // sequence.
-        docs.keyboard.backspace();
+        for (var i = 0; i < (currentSequence.length - 1); i++) {
+            docs.backspace();
+        }
+
         vim.switchToNormalMode();
         return false;
     }
-    lastChr = chr;
+    if (vim.keys.escapeSequence.indexOf(currentSequence) != 0) {
+        currentSequence = e.key;
+    }
+};
+
+docs.keydown = function (e) {
+    if (vim.mode == "insert") {
+        return vim.insert_keydown(e);
+    }
+    if (vim.mode == "normal") {
+        return vim.normal_keydown(e);
+    }
 };
