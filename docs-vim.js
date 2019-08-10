@@ -18,18 +18,9 @@ vim.switchToInsertMode = function () {
     docs.keyboard.stopBlockingKeyboard();
 };
 
-// This is what gets called when the keyboard is "blocked"
-// AKA we're in normal mode
-docs.keyboard.handleKeyboard = function (e) {
-    // Allow keys that we send to go through even in normal mode
-    if (window.vim_pressed > 0) {
-        window.vim_pressed--;
-        return true;
-    }
-
-    if (typeof e.key === "undefined") {
-        e.key = docs.utils.keyFromKeyCode(e.shiftKey, e.keyCode);
-    }
+// Called in normal mode.
+docs.keyboard.blockedKeydown = function (e) {
+    e.preventDefault();
 
     if (e.key == "i") {
         vim.switchToInsertMode();
@@ -47,20 +38,19 @@ docs.keyboard.handleKeyboard = function (e) {
     }
 
     if (e.key.indexOf("Arrow") == 0 || e.key == "Delete") {
-        docs.pressKey(e.key, docs.codeFromKey(false, e.key), true);
+        docs.keyboard.pressKey(docs.utils.codeFromKey(e.key));
     }
 
     if (e.key == "V" && e.shift) {
         console.log("select");
     }
 
-    e.preventDefault();
     return false;
 };
 
-// This is what gets called when the user is in insert mode
+// This is what gets called when the user is in insert mode.
 var lastChr = "";
-docs.keyboard.handleKeydown = function (e) {
+docs.keyboard.unblockedKeydown = function (e) {
     var chr = e.key; //"a", "b", etc.
     var escapeSeq = "hn";
 
@@ -72,10 +62,12 @@ docs.keyboard.handleKeydown = function (e) {
     if (chr == "Escape") {
         vim.switchToNormalMode();
     }
+
     if (chr == vim.keys.escapeSeq[1] && lastChr == vim.keys.escapeSeq[0]) {
         e.preventDefault();
-        // We need to delete the first character already typed in the seq.
-        docs.pressKey(e.key, docs.codeFromKey(false, "Backspace"), false);
+        // We need to delete the first character already typed in the escape
+        // sequence.
+        docs.keyboard.backspace();
         vim.switchToNormalMode();
         return false;
     }
