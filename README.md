@@ -15,6 +15,7 @@ Currently supported features:
 * Normal mode
     * Getting to insert mode with the "i" key
     * Moving with the home-row keys
+    * Repeated motions using the number keys
 * Chrome (tested on 63.0)
 * (Not really) Firefox
     * It will install, but many of the features work incorrectly.
