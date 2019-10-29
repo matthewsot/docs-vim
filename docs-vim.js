@@ -1,6 +1,6 @@
-num = '';
 vim = {
     "mode": "insert",
+    "num": "",
     "keys": {
         "move": "dhtn", // QWERTY: hjkl
         "escapeSequence": "hn", // QWERTY: jk or jl
@@ -9,6 +9,7 @@ vim = {
 
 vim.switchToNormalMode = function () {
     vim.mode = "normal";
+    vim.num = "";
     docs.setCursorWidth("7px");
 };
 
@@ -47,14 +48,13 @@ vim.normal_keydown = function (e) {
     }
 
     if (e.key.indexOf("Arrow") == 0 || e.key == "Delete") {
-	if (num != '') {
-	    for (var i = 0; i < Number(num); i++) {
-                docs.pressKey(docs.codeFromKey(e.key));
-            }
-	    num = '';
-        } else {
-	    docs.pressKey(docs.codeFromKey(e.key));
+	if (vim.num.length == 0 || isNaN(vim.num)) {
+            vim.num = "1";
 	}
+	for (var i = 0; i < Number(vim.num); i++) {
+            docs.pressKey(docs.codeFromKey(e.key));
+	}
+	vim.num = "";
     }
 
     if (e.key == "V" && e.shift) {
