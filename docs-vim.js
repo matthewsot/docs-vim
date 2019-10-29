@@ -1,3 +1,4 @@
+num = '';
 vim = {
     "mode": "insert",
     "keys": {
@@ -37,12 +38,23 @@ vim.normal_keydown = function (e) {
     keyMap[vim.keys.move[2]] = "ArrowUp";
     keyMap[vim.keys.move[3]] = "ArrowRight";
 
+    if (e.key.match(/\d+/)) {
+        num += e.key.toString();
+    }
+
     if (e.key in keyMap) {
         e.key = keyMap[e.key];
     }
 
     if (e.key.indexOf("Arrow") == 0 || e.key == "Delete") {
-        docs.pressKey(docs.codeFromKey(e.key));
+	if (num != '') {
+	    for (var i = 0; i < Number(num); i++) {
+                docs.pressKey(docs.codeFromKey(e.key));
+            }
+	    num = '';
+        } else {
+	    docs.pressKey(docs.codeFromKey(e.key));
+	}
     }
 
     if (e.key == "V" && e.shift) {
