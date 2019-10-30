@@ -16,6 +16,7 @@ Currently supported features:
     * Getting to insert mode with the "i" key
     * Moving with the home-row keys
     * Repeated motions using the number keys
+    * Delete a single character with the "x" key
 * Chrome (tested on 63.0)
 * (Not really) Firefox
     * It will install, but many of the features work incorrectly.
@@ -43,6 +44,7 @@ want to use the more common QWERTY keybindings, you'd change to:
 ```
 vim = {
     "mode": "insert",
+    "num": "",
     "keys": {
         "move": "hjkl",
         "escapeSeq": "jk",

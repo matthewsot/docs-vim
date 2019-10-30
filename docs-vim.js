@@ -2,8 +2,8 @@ vim = {
     "mode": "insert",
     "num": "",
     "keys": {
-        "move": "dhtn", // QWERTY: hjkl
-        "escapeSequence": "hn", // QWERTY: jk or jl
+        "move": "hjkl", // QWERTY: hjkl
+        "escapeSequence": "jk", // QWERTY: jk or jl
     }
 };
 
@@ -33,14 +33,14 @@ vim.normal_keydown = function (e) {
         return true;
     }
 
-    var keyMap = { "Backspace": "ArrowLeft" };
+    var keyMap = { "Backspace": "ArrowLeft", "x": "Delete" };
     keyMap[vim.keys.move[0]] = "ArrowLeft";
     keyMap[vim.keys.move[1]] = "ArrowDown";
     keyMap[vim.keys.move[2]] = "ArrowUp";
     keyMap[vim.keys.move[3]] = "ArrowRight";
 
     if (e.key.match(/\d+/)) {
-        num += e.key.toString();
+        vim.num += e.key.toString();
     }
 
     if (e.key in keyMap) {
