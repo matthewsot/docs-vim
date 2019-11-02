@@ -17,6 +17,12 @@ Currently supported features:
     * Moving with the home-row keys
     * Repeated motions using the number keys
     * Delete a single character with the "x" key
+    * Enter visual mode with the "v" key
+* Visual mode
+    * Getting to normal mode with Esc
+    * Moving with the home-row keys
+    * Repeated motions using the number keys
+    * Delete selected text with the "x" key
 * Chrome (tested on 63.0)
 * (Not really) Firefox
     * It will install, but many of the features work incorrectly.
