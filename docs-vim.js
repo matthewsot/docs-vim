@@ -2,13 +2,19 @@ vim = {
     "mode": "insert",
     "num": "",
     "keys": {
-        "move": "dhtn", // QWERTY: hjkl
-        "escapeSequence": "hn", // QWERTY: jk or jl
+        "move": "hjkl", // QWERTY: hjkl
+        "escapeSequence": "jk", // QWERTY: jk or jl
     }
 };
 
 vim.switchToNormalMode = function () {
     vim.mode = "normal";
+    vim.num = "";
+    docs.setCursorWidth("7px");
+};
+
+vim.switchToVisualMode = function () {
+    vim.mode = "visual";
     vim.num = "";
     docs.setCursorWidth("7px");
 };
@@ -31,6 +37,11 @@ vim.normal_keydown = function (e) {
     if (e.key == "i") {
         vim.switchToInsertMode();
         return true;
+    }
+
+    if (e.key == "v") {
+	vim.switchToVisualMode();
+	return true;
     }
 
     var keyMap = { "Backspace": "ArrowLeft", "x": "Delete" };
@@ -57,8 +68,46 @@ vim.normal_keydown = function (e) {
 	vim.num = "";
     }
 
-    if (e.key == "V" && e.shift) {
-        console.log("select");
+    return false;
+};
+
+// Called in visual mode.
+vim.visual_keydown = function (e) {
+    if (e.key.match(/F\d+/)) {
+        // Pass through any function keys.
+        return true;
+    }
+
+    if (e.key == "Escape") {
+	// Escape visual mode.
+        vim.switchToNormalMode();
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    var keyMap = { "Backspace": "ArrowLeft", "x": "Delete" };
+    keyMap[vim.keys.move[0]] = "ArrowLeft";
+    keyMap[vim.keys.move[1]] = "ArrowDown";
+    keyMap[vim.keys.move[2]] = "ArrowUp";
+    keyMap[vim.keys.move[3]] = "ArrowRight";
+
+    if (e.key.match(/\d+/)) {
+        vim.num += e.key.toString();
+    }
+
+    if (e.key in keyMap) {
+        e.key = keyMap[e.key];
+    }
+
+    if (e.key.indexOf("Arrow") == 0 || e.key == "Delete") {
+	if (vim.num.length == 0 || isNaN(vim.num)) {
+            vim.num = "1";
+	}
+	for (var i = 0; i < Number(vim.num); i++) {
+            docs.pressKey(docs.codeFromKey(e.key), false, true);
+	}
+	vim.num = "";
     }
 
     return false;
@@ -96,5 +145,8 @@ docs.keydown = function (e) {
     }
     if (vim.mode == "normal") {
         return vim.normal_keydown(e);
+    }
+    if (vim.mode == "visual") {
+	return vim.visual_keydown(e);
     }
 };
