@@ -2,8 +2,8 @@ vim = {
     "mode": "insert",
     "num": "",
     "keys": {
-        "move": "hjkl", // QWERTY: hjkl
-        "escapeSequence": "jk", // QWERTY: jk or jl
+        "move": "dhtn", // QWERTY: hjkl
+        "escapeSequence": "hn", // QWERTY: jk or jl
     }
 };
 
