@@ -2,8 +2,8 @@ vim = {
     "mode": "insert",
     "num": "",
     "keys": {
-        "move": "dhtn", // QWERTY: hjkl
-        "escapeSequence": "hn", // QWERTY: jk or jl
+        "move": "hjkl", // QWERTY: hjkl
+        "escapeSequence": "jk", // QWERTY: jk or jl
     }
 };
 
@@ -105,7 +105,11 @@ vim.visual_keydown = function (e) {
             vim.num = "1";
 	}
 	for (var i = 0; i < Number(vim.num); i++) {
-            docs.pressKey(docs.codeFromKey(e.key), false, true);
+	    if (e.key.indexOf("Arrow") == 0) {
+                docs.pressKey(docs.codeFromKey(e.key), false, true);
+	    } else {
+                docs.pressKey(docs.codeFromKey(e.key));
+	    }
 	}
 	vim.num = "";
     }
