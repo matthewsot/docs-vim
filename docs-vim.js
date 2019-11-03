@@ -124,6 +124,8 @@ vim.visual_keydown = function (e) {
                 docs.pressKey(docs.codeFromKey(e.key), false, true);
 	    } else {
                 docs.pressKey(docs.codeFromKey(e.key));
+		// Switch to normal mode when 'x' pressed
+		vim.switchToNormalMode();
 	    }
 	}
 	vim.num = "";
