@@ -64,6 +64,6 @@ Near the top of ``docs-vim.js``.
 I don't really use all that much of vim's shortcuts, but a few particular things I want to add
 eventually:
 
-* Selections with v/shift-V (visual/visual line mode)
+* Selections with shift-V (visual line mode)
 * Command mode with find and replace, go to line #, etc.
 * Quick find with /
