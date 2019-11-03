@@ -91,12 +91,6 @@ vim.visual_keydown = function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        // We need to delete the first character already typed in the escape
-        // sequence.
-        for (var i = 0; i < (vim.currentSequence.length - 1); i++) {
-            docs.backspace();
-        }
-
         vim.switchToNormalMode();
         return false;
     }
