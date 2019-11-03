@@ -1,6 +1,7 @@
 vim = {
     "mode": "insert",
     "num": "",
+    "currentSequence": "",
     "keys": {
         "move": "hjkl", // QWERTY: hjkl
         "escapeSequence": "jk", // QWERTY: jk or jl
@@ -14,12 +15,14 @@ vim.switchToNormalMode = function () {
 };
 
 vim.switchToVisualMode = function () {
+    vim.currentSequence = "";
     vim.mode = "visual";
     vim.num = "";
     docs.setCursorWidth("7px");
 };
 
 vim.switchToInsertMode = function () {
+    vim.currentSequence = "";
     vim.mode = "insert";
     docs.setCursorWidth("2px");
 };
@@ -83,6 +86,24 @@ vim.visual_keydown = function (e) {
         vim.switchToNormalMode();
     }
 
+    vim.currentSequence += e.key;
+    if (vim.currentSequence == vim.keys.escapeSequence) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // We need to delete the first character already typed in the escape
+        // sequence.
+        for (var i = 0; i < (vim.currentSequence.length - 1); i++) {
+            docs.backspace();
+        }
+
+        vim.switchToNormalMode();
+        return false;
+    }
+    if (vim.keys.escapeSequence.indexOf(vim.currentSequence) != 0) {
+        vim.currentSequence = e.key;
+    }
+
     e.preventDefault();
     e.stopPropagation();
 
@@ -118,28 +139,27 @@ vim.visual_keydown = function (e) {
 };
 
 // Called in insert mode.
-var currentSequence = "";
 vim.insert_keydown = function (e) {
     if (e.key == "Escape") {
         vim.switchToNormalMode();
     }
 
-    currentSequence += e.key;
-    if (currentSequence == vim.keys.escapeSequence) {
+    vim.currentSequence += e.key;
+    if (vim.currentSequence == vim.keys.escapeSequence) {
         e.preventDefault();
         e.stopPropagation();
 
         // We need to delete the first character already typed in the escape
         // sequence.
-        for (var i = 0; i < (currentSequence.length - 1); i++) {
+        for (var i = 0; i < (vim.currentSequence.length - 1); i++) {
             docs.backspace();
         }
 
         vim.switchToNormalMode();
         return false;
     }
-    if (vim.keys.escapeSequence.indexOf(currentSequence) != 0) {
-        currentSequence = e.key;
+    if (vim.keys.escapeSequence.indexOf(vim.currentSequence) != 0) {
+        vim.currentSequence = e.key;
     }
 };
 
