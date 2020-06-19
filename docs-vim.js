@@ -43,8 +43,8 @@ vim.normal_keydown = function (e) {
     }
 
     if (e.key == "v") {
-	vim.switchToVisualMode();
-	return true;
+        vim.switchToVisualMode();
+        return true;
     }
 
     var keyMap = { "Backspace": "ArrowLeft", "x": "Delete" };
@@ -62,13 +62,13 @@ vim.normal_keydown = function (e) {
     }
 
     if (e.key.indexOf("Arrow") == 0 || e.key == "Delete") {
-	if (vim.num.length == 0 || isNaN(vim.num)) {
+        if (vim.num.length == 0 || isNaN(vim.num)) {
             vim.num = "1";
-	}
-	for (var i = 0; i < Number(vim.num); i++) {
+        }
+        for (var i = 0; i < Number(vim.num); i++) {
             docs.pressKey(docs.codeFromKey(e.key));
-	}
-	vim.num = "";
+        }
+        vim.num = "";
     }
 
     return false;
@@ -82,7 +82,7 @@ vim.visual_keydown = function (e) {
     }
 
     if (e.key == "Escape") {
-	// Escape visual mode.
+        // Escape visual mode.
         vim.switchToNormalMode();
     }
 
@@ -116,19 +116,19 @@ vim.visual_keydown = function (e) {
     }
 
     if (e.key.indexOf("Arrow") == 0 || e.key == "Delete") {
-	if (vim.num.length == 0 || isNaN(vim.num)) {
+        if (vim.num.length == 0 || isNaN(vim.num)) {
             vim.num = "1";
-	}
-	for (var i = 0; i < Number(vim.num); i++) {
-	    if (e.key.indexOf("Arrow") == 0) {
+        }
+        for (var i = 0; i < Number(vim.num); i++) {
+            if (e.key.indexOf("Arrow") == 0) {
                 docs.pressKey(docs.codeFromKey(e.key), false, true);
-	    } else {
+            } else {
                 docs.pressKey(docs.codeFromKey(e.key));
-		// Switch to normal mode when 'x' pressed
-		vim.switchToNormalMode();
-	    }
-	}
-	vim.num = "";
+                // Switch to normal mode when 'x' pressed
+                vim.switchToNormalMode();
+            }
+        }
+        vim.num = "";
     }
 
     return false;
@@ -167,6 +167,6 @@ docs.keydown = function (e) {
         return vim.normal_keydown(e);
     }
     if (vim.mode == "visual") {
-	return vim.visual_keydown(e);
+        return vim.visual_keydown(e);
     }
 };
