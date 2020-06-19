@@ -1,7 +1,7 @@
 vim = {
-    "mode": "insert",
-    "num": "",
-    "currentSequence": "",
+    "mode": "insert", // Keep track of current mode
+    "num": "", // Keep track of number keys pressed by the user
+    "currentSequence": "", // Keep track of key sequences
     "keys": {
         "move": "dhtn", // QWERTY: hjkl
         "escapeSequence": "hn", // QWERTY: jk or jl
@@ -9,6 +9,7 @@ vim = {
 };
 
 vim.switchToNormalMode = function () {
+    vim.currentSequence = ""
     vim.mode = "normal";
     vim.num = "";
     docs.setCursorWidth("7px");
@@ -24,6 +25,7 @@ vim.switchToVisualMode = function () {
 vim.switchToInsertMode = function () {
     vim.currentSequence = "";
     vim.mode = "insert";
+    vim.num = "";
     docs.setCursorWidth("2px");
 };
 

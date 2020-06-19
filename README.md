@@ -49,8 +49,7 @@ want to use the more common QWERTY keybindings, you'd change to:
 
 ```
 vim = {
-    "mode": "insert",
-    "num": "",
+    ...
     "keys": {
         "move": "hjkl",
         "escapeSeq": "jk",
