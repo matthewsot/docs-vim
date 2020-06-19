@@ -8,6 +8,13 @@ vim = {
     }
 };
 
+vim.addKeyMappings = function (baseMap) {
+    baseMap[vim.keys.move[0]] = "ArrowLeft";
+    baseMap[vim.keys.move[1]] = "ArrowDown";
+    baseMap[vim.keys.move[2]] = "ArrowUp";
+    baseMap[vim.keys.move[3]] = "ArrowRight";
+}
+
 vim.switchToNormalMode = function () {
     vim.currentSequence = ""
     vim.mode = "normal";
@@ -50,10 +57,7 @@ vim.normal_keydown = function (e) {
     }
 
     var keyMap = { "Backspace": "ArrowLeft", "x": "Delete" };
-    keyMap[vim.keys.move[0]] = "ArrowLeft";
-    keyMap[vim.keys.move[1]] = "ArrowDown";
-    keyMap[vim.keys.move[2]] = "ArrowUp";
-    keyMap[vim.keys.move[3]] = "ArrowRight";
+    vim.addKeyMappings(keyMap);
 
     if (e.key.match(/\d+/)) {
         vim.num += e.key.toString();
@@ -104,10 +108,7 @@ vim.visual_keydown = function (e) {
     e.stopPropagation();
 
     var keyMap = { "Backspace": "ArrowLeft", "x": "Delete" };
-    keyMap[vim.keys.move[0]] = "ArrowLeft";
-    keyMap[vim.keys.move[1]] = "ArrowDown";
-    keyMap[vim.keys.move[2]] = "ArrowUp";
-    keyMap[vim.keys.move[3]] = "ArrowRight";
+    vim.addKeyMappings(keyMap);
 
     if (e.key.match(/\d+/)) {
         vim.num += e.key.toString();
