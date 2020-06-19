@@ -13,10 +13,10 @@ vim.addKeyMappings = function (baseMap) {
     baseMap[vim.keys.move[1]] = "ArrowDown";
     baseMap[vim.keys.move[2]] = "ArrowUp";
     baseMap[vim.keys.move[3]] = "ArrowRight";
-}
+};
 
 vim.switchToNormalMode = function () {
-    vim.currentSequence = ""
+    vim.currentSequence = "";
     vim.mode = "normal";
     vim.num = "";
     docs.setCursorWidth("7px");
