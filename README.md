@@ -3,6 +3,11 @@
 This repository uses ``git submodule``, after cloning it you should run ``git
 submodule init`` and ``git submodule update``.
 
+## Update
+Apparently Google is [making significant changes to the Docs
+editor](https://workspaceupdates.googleblog.com/2021/05/Google-Docs-Canvas-Based-Rendering-Update.html),
+so this will likely stop working in the next few months.
+
 ## Overview
 This simulates very limited versions of vim's insert and normal modes on Google
 Docs.
