@@ -1,5 +1,5 @@
 # docs-vim
-## Installation
+## Installation (Chrome)
 ```
 git clone https://github.com/matthewsot/docs-vim.git
 cd docs-vim
