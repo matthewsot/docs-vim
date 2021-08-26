@@ -52,6 +52,11 @@ vim.normal_keydown = function (e) {
     e.preventDefault();
     e.stopPropagation();
 
+    if (e.key == "a") {
+        docs.pressKey(docs.codeFromKey("ArrowRight"));
+        e.key = "i";
+    }
+
     if (e.key == "i") {
         vim.switchToInsertMode();
         return true;
