@@ -8,6 +8,12 @@ vim = {
     }
 };
 
+var multiMaps = {
+    "b": [["ArrowLeft", true]],
+    "e": [["ArrowRight", true]],
+    "w": [["ArrowRight", true], ["ArrowRight", true], ["ArrowLeft", true]]
+};
+
 vim.addKeyMappings = function (baseMap) {
     baseMap[vim.keys.move[0]] = "ArrowLeft";
     baseMap[vim.keys.move[1]] = "ArrowDown";
@@ -66,6 +72,10 @@ vim.normal_keydown = function (e) {
     if (e.key in keyMap) {
         e.key = keyMap[e.key];
     }
+
+    multiMaps[e.key]?.forEach(([key, ...args]) => {
+        docs.pressKey(docs.codeFromKey(key), ...args)
+    });
 
     if (e.key.indexOf("Arrow") == 0 || e.key == "Delete") {
         if (vim.num.length == 0 || isNaN(vim.num)) {
