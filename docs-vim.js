@@ -5,6 +5,12 @@ vim = {
     "keys": {
         "move": "dhtn", // QWERTY: hjkl
         "escapeSequence": "hn", // QWERTY: jk or jl
+    },
+    "multiMaps" : {
+        "b": [["ArrowLeft", true]], // ctrl + <-
+        "e": [["ArrowRight", true]], // ctrl + ->
+        // w is same behavior as eeb
+        "w": [["ArrowRight", true], ["ArrowRight", true], ["ArrowLeft", true]]
     }
 };
 
@@ -46,6 +52,11 @@ vim.normal_keydown = function (e) {
     e.preventDefault();
     e.stopPropagation();
 
+    if (e.key == "a") {
+        docs.pressKey(docs.codeFromKey("ArrowRight"));
+        e.key = "i";
+    }
+
     if (e.key == "i") {
         vim.switchToInsertMode();
         return true;
@@ -66,6 +77,10 @@ vim.normal_keydown = function (e) {
     if (e.key in keyMap) {
         e.key = keyMap[e.key];
     }
+
+    vim.multiMaps[e.key]?.forEach(([key, ...args]) => {
+        docs.pressKey(docs.codeFromKey(key), ...args)
+    });
 
     if (e.key.indexOf("Arrow") == 0 || e.key == "Delete") {
         if (vim.num.length == 0 || isNaN(vim.num)) {
