@@ -5,13 +5,13 @@ vim = {
     "keys": {
         "move": "dhtn", // QWERTY: hjkl
         "escapeSequence": "hn", // QWERTY: jk or jl
+    },
+    "multiMaps" : {
+        "b": [["ArrowLeft", true]], // ctrl + <-
+        "e": [["ArrowRight", true]], // ctrl + ->
+        // w is same behavior as eeb
+        "w": [["ArrowRight", true], ["ArrowRight", true], ["ArrowLeft", true]]
     }
-};
-
-var multiMaps = {
-    "b": [["ArrowLeft", true]],
-    "e": [["ArrowRight", true]],
-    "w": [["ArrowRight", true], ["ArrowRight", true], ["ArrowLeft", true]]
 };
 
 vim.addKeyMappings = function (baseMap) {
@@ -78,7 +78,7 @@ vim.normal_keydown = function (e) {
         e.key = keyMap[e.key];
     }
 
-    multiMaps[e.key]?.forEach(([key, ...args]) => {
+    vim.multiMaps[e.key]?.forEach(([key, ...args]) => {
         docs.pressKey(docs.codeFromKey(key), ...args)
     });
 
