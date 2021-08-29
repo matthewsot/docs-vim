@@ -79,7 +79,11 @@ vim.normal_keydown = function (e) {
     }
 
     vim.multiMaps[e.key]?.forEach(([key, ...args]) => {
-        docs.pressKey(docs.codeFromKey(key), ...args)
+        const numRepeats = parseInt(vim.num) || 1;
+        for (let i = 0; i < numRepeats; i++) {
+            docs.pressKey(docs.codeFromKey(key), ...args);
+        }
+        vim.num = "";
     });
 
     if (e.key.indexOf("Arrow") == 0 || e.key == "Delete") {
