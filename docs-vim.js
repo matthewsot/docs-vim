@@ -10,8 +10,17 @@ vim = {
         "b": [["ArrowLeft", true]], // ctrl + <-
         "e": [["ArrowRight", true]], // ctrl + ->
         // w is same behavior as eeb
-        "w": [["ArrowRight", true], ["ArrowRight", true], ["ArrowLeft", true]]
-    }
+        "w": [["ArrowRight", true], ["ArrowRight", true], ["ArrowLeft", true]],
+        "a": [["ArrowRight"]],
+        "A": [["ArrowDown", true]],
+        "I": [["ArrowUp", true]],
+        "$": [["ArrowDown", true]],
+        "0": [["ArrowUp", true]],
+        "o": [["ArrowDown", true], ["Enter"]],
+        "O": [["ArrowUp", true], ["ArrowLeft"], ["Enter"]]
+    },
+    "needsInsert": ["a", "A", "I", "o", "O"]
+
 };
 
 vim.addKeyMappings = function (baseMap) {
@@ -52,11 +61,6 @@ vim.normal_keydown = function (e) {
     e.preventDefault();
     e.stopPropagation();
 
-    if (e.key == "a") {
-        docs.pressKey(docs.codeFromKey("ArrowRight"));
-        e.key = "i";
-    }
-
     if (e.key == "i") {
         vim.switchToInsertMode();
         return true;
@@ -85,6 +89,11 @@ vim.normal_keydown = function (e) {
         }
         vim.num = "";
     });
+
+    if (vim.needsInsert.includes(e.key)) {
+        vim.switchToInsertMode();
+        return true;
+    }
 
     if (e.key.indexOf("Arrow") == 0 || e.key == "Delete") {
         if (vim.num.length == 0 || isNaN(vim.num)) {
