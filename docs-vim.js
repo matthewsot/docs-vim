@@ -1,12 +1,14 @@
+const useQWERTY = false;
+const directionalKeys = useQWERTY ? "hjkl" : "dhtn";
+
 vim = {
     "mode": "insert", // Keep track of current mode
     "num": "", // Keep track of number keys pressed by the user
     "currentSequence": "", // Keep track of key sequences
-    "keys": {
-        "move": "dhtn", // QWERTY: hjkl
-        "escapeSequence": "hn", // QWERTY: jk or jl
-    },
-    "multiMaps" : {
+    "escapeSequence": useQWERTY ? "jk" : "hn",
+    "keyMaps" : {
+        "Backspace": [["ArrowLeft"]],
+        "x": [["Delete"]],
         "b": [["ArrowLeft", true]], // ctrl + <-
         "e": [["ArrowRight", true]], // ctrl + ->
         // w is same behavior as eeb
@@ -20,8 +22,12 @@ vim = {
         "O": [["ArrowUp", true], ["ArrowLeft"], ["Enter"]]
     },
     "needsInsert": ["a", "A", "I", "o", "O"]
-
 };
+
+vim.keyMaps[directionalKeys[0]] = [["ArrowLeft"]];
+vim.keyMaps[directionalKeys[1]] = [["ArrowDown"]];
+vim.keyMaps[directionalKeys[2]] = [["ArrowUp"]];
+vim.keyMaps[directionalKeys[3]] = [["ArrowRight"]];
 
 vim.addKeyMappings = function (baseMap) {
     baseMap[vim.keys.move[0]] = "ArrowLeft";
@@ -71,18 +77,11 @@ vim.normal_keydown = function (e) {
         return true;
     }
 
-    var keyMap = { "Backspace": "ArrowLeft", "x": "Delete" };
-    vim.addKeyMappings(keyMap);
-
     if (e.key.match(/\d+/)) {
         vim.num += e.key.toString();
     }
 
-    if (e.key in keyMap) {
-        e.key = keyMap[e.key];
-    }
-
-    vim.multiMaps[e.key]?.forEach(([key, ...args]) => {
+    vim.keyMaps[e.key]?.forEach(([key, ...args]) => {
         const numRepeats = parseInt(vim.num) || 1;
         for (let i = 0; i < numRepeats; i++) {
             docs.pressKey(docs.codeFromKey(key), ...args);
@@ -93,16 +92,6 @@ vim.normal_keydown = function (e) {
     if (vim.needsInsert.includes(e.key)) {
         vim.switchToInsertMode();
         return true;
-    }
-
-    if (e.key.indexOf("Arrow") == 0 || e.key == "Delete") {
-        if (vim.num.length == 0 || isNaN(vim.num)) {
-            vim.num = "1";
-        }
-        for (var i = 0; i < Number(vim.num); i++) {
-            docs.pressKey(docs.codeFromKey(e.key));
-        }
-        vim.num = "";
     }
 
     return false;
@@ -121,46 +110,39 @@ vim.visual_keydown = function (e) {
     }
 
     vim.currentSequence += e.key;
-    if (vim.currentSequence == vim.keys.escapeSequence) {
+    if (vim.currentSequence == vim.escapeSequence) {
         e.preventDefault();
         e.stopPropagation();
 
         vim.switchToNormalMode();
         return false;
     }
-    if (vim.keys.escapeSequence.indexOf(vim.currentSequence) != 0) {
+    if (vim.escapeSequence.indexOf(vim.currentSequence) != 0) {
         vim.currentSequence = e.key;
     }
 
     e.preventDefault();
     e.stopPropagation();
 
-    var keyMap = { "Backspace": "ArrowLeft", "x": "Delete" };
-    vim.addKeyMappings(keyMap);
-
     if (e.key.match(/\d+/)) {
         vim.num += e.key.toString();
     }
 
-    if (e.key in keyMap) {
-        e.key = keyMap[e.key];
-    }
-
-    if (e.key.indexOf("Arrow") == 0 || e.key == "Delete") {
-        if (vim.num.length == 0 || isNaN(vim.num)) {
-            vim.num = "1";
-        }
-        for (var i = 0; i < Number(vim.num); i++) {
-            if (e.key.indexOf("Arrow") == 0) {
-                docs.pressKey(docs.codeFromKey(e.key), false, true);
+    vim.keyMaps[e.key]?.forEach(([key, ...args]) => {
+        const numRepeats = parseInt(vim.num) || 1;
+        for (let i = 0; i < numRepeats; i++) {
+            if (key.indexOf("Arrow") == 0) {
+                // get the special keys pressed and default to false
+                const keyArgs = [...args, false, false].slice(0, 2);
+                keyArgs[1] = true;
+                docs.pressKey(docs.codeFromKey(key), ...keyArgs);
             } else {
-                docs.pressKey(docs.codeFromKey(e.key));
-                // Switch to normal mode when 'x' pressed
+                docs.pressKey(docs.codeFromKey(key), ...args);
                 vim.switchToNormalMode();
             }
         }
         vim.num = "";
-    }
+    });
 
     return false;
 };
@@ -172,7 +154,7 @@ vim.insert_keydown = function (e) {
     }
 
     vim.currentSequence += e.key;
-    if (vim.currentSequence == vim.keys.escapeSequence) {
+    if (vim.currentSequence == vim.escapeSequence) {
         e.preventDefault();
         e.stopPropagation();
 
@@ -185,7 +167,7 @@ vim.insert_keydown = function (e) {
         vim.switchToNormalMode();
         return false;
     }
-    if (vim.keys.escapeSequence.indexOf(vim.currentSequence) != 0) {
+    if (vim.escapeSequence.indexOf(vim.currentSequence) != 0) {
         vim.currentSequence = e.key;
     }
 };
